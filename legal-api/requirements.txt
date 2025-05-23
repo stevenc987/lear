@@ -58,12 +58,8 @@ PyPDF2==1.26.0
 reportlab==3.6.12
 html-sanitizer==2.4.1
 lxml==5.2.2
+google-auth==2.29.0
 git+https://github.com/bcgov/business-schemas.git@2.18.41#egg=registry_schemas
 git+https://github.com/bcgov/lear.git#egg=sql-versioning&subdirectory=python/common/sql-versioning
 
-google-auth==2.38.0
-google-cloud-pubsub==2.21.4
-google-api-core==2.24.2
-proto-plus==1.26.1
-protobuf==3.20.3
 git+https://github.com/bcgov/sbc-connect-common.git@main#subdirectory=python/gcp-queue
