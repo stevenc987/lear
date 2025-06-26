@@ -540,11 +540,13 @@ class ListFilingResource():  # pylint: disable=too-many-public-methods
         else:
             legal_type = filing_json['filing'][filing_type]['nameRequest'].get('legalType')
 
-        if not authorized(identifier, jwt, action=['edit']) or \
-                not is_allowed(business, state, filing_type, legal_type, jwt, filing_sub_type, filing):
-            return jsonify({'message':
-                            f'You are not authorized to submit a filing for {identifier}.'}), \
-                HTTPStatus.UNAUTHORIZED
+        if not authorized(identifier, jwt, action=['edit']):
+            return jsonify({'message': f'You are not authorized to submit filings for {identifier}.'}), \
+                HTTPStatus.FORBIDDEN
+
+        if not is_allowed(business, state, filing_type, legal_type, jwt, filing_sub_type, filing):
+            return jsonify({'message': f'You are not allowed to submit this type of filing for {identifier}.'}), \
+                HTTPStatus.FORBIDDEN
 
         return None, None
 
@@ -583,7 +585,7 @@ class ListFilingResource():  # pylint: disable=too-many-public-methods
                 ) and \
                     ListFilingResource.is_before_epoch_filing(filing.filing_json, business):
                 filing.transaction_id = epoch_filing[0].transaction_id
-                filing.set_processed(business.legal_type)
+                filing.set_processed()
                 filing.save()
             else:
                 # todo: when removing nats, leave only filingMessage, and remove 'filing' as this part is used by OCP
